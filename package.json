@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "sideEffects": false,
+  "sideEffects": [
+    "*.css"
+  ],
   "scripts": {
     "build": "npx webpack"
   },
@@ -22,6 +24,7 @@
   },
   "devDependencies": {
     "css-loader": "^1.0.0",
+    "mini-css-extract-plugin": "^0.4.1",
     "style-loader": "^0.22.1"
   }
 }

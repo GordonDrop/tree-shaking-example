@@ -2,7 +2,7 @@ export function random(min = 0, max = 1){
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export function jsonParseSage(str){
+export function jsonParseSafe(str){
   try {
     return JSON.parse(str);
   } catch(e) {
