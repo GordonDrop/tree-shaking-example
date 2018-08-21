@@ -1,30 +1,30 @@
 import './index.css';
-import * as d3 from 'd3';
-import * as utils from './lib/utils';
+import {select, range, voronoi, mouse} from 'd3';
+import {random} from './lib/utils';
 
-const svg = d3.select("svg").on("touchmove mousemove", moved),
+const svg = select("svg").on("touchmove mousemove", moved),
   width = +svg.attr("width"),
   height = +svg.attr("height");
 
-const sites = d3.range(100)
+const sites = range(100)
   .map(() => {
-    return [utils.random(0, width), utils.random(0, height)];
+    return [random(0, width), random(0, height)];
   });
 
-const voronoi = d3.voronoi()
+const voronoiDiagram = voronoi()
   .extent([[-1, -1], [width + 1, height + 1]]);
 
 let polygon = svg.append("g")
   .attr("class", "polygons")
   .selectAll("path")
-  .data(voronoi.polygons(sites))
+  .data(voronoiDiagram.polygons(sites))
   .enter().append("path")
   .call(redrawPolygon);
 
 let link = svg.append("g")
   .attr("class", "links")
   .selectAll("line")
-  .data(voronoi.links(sites))
+  .data(voronoiDiagram.links(sites))
   .enter().append("line")
   .call(redrawLink);
 
@@ -37,12 +37,12 @@ let site = svg.append("g")
   .call(redrawSite);
 
 function moved() {
-  sites[0] = d3.mouse(this);
+  sites[0] = mouse(this);
   redraw();
 }
 
 function redraw() {
-  const diagram = voronoi(sites);
+  const diagram = voronoiDiagram(sites);
   polygon = polygon.data(diagram.polygons()).call(redrawPolygon);
   link = link.data(diagram.links()), link.exit().remove();
   link = link.enter().append("line").merge(link).call(redrawLink);
